@@ -1,7 +1,7 @@
 package log
 
 import (
-	"golang.org/x/net/context"
+	"context"
 )
 
 type LogLevel int
@@ -15,13 +15,13 @@ const (
 )
 
 type LogMessage struct {
-	Level LogLevel
+	Level  LogLevel
 	Format string
-	Args []interface{}
+	Args   []interface{}
 }
 
 type TestLogger struct {
-	name string
+	name     string
 	Messages []LogMessage
 }
 

@@ -1,8 +1,8 @@
 package log
 
 import (
-	"golang.org/x/net/context"
 	"fmt"
+	"context"
 )
 
 type Logger interface {
@@ -30,31 +30,65 @@ func AddLogger(logger Logger) {
 	_loggers = append(_loggers, logger)
 }
 
+var loggingDisabled = "loggingDisabled" // TODO: Check core libs on how to do it proepry
+
+func NewContextWithLoggingDisabled(c context.Context) context.Context {
+	return context.WithValue(c, &loggingDisabled, true)
+}
+
+func NewContextWithLoggingEnabled(c context.Context) context.Context {
+	return context.WithValue(c, &loggingDisabled, false)
+}
+
+func isDisabled(c context.Context) bool {
+	if disabled := c.Value(&loggingDisabled); disabled != nil {
+		return disabled.(bool)
+	}
+	return false
+}
+
+type LogFunc func(c context.Context, format string, args ...interface{})
+
 func Debugf(c context.Context, format string, args ...interface{}) {
+	if isDisabled(c) {
+		return
+	}
 	for _, l := range _loggers {
 		l.Debugf(c, format, args...)
 	}
 }
 
 func Infof(c context.Context, format string, args ...interface{}) {
+	if isDisabled(c) {
+		return
+	}
 	for _, l := range _loggers {
 		l.Infof(c, format, args...)
 	}
 }
 
 func Warningf(c context.Context, format string, args ...interface{}) {
+	if isDisabled(c) {
+		return
+	}
 	for _, l := range _loggers {
 		l.Warningf(c, format, args...)
 	}
 }
 
 func Errorf(c context.Context, format string, args ...interface{}) {
+	if isDisabled(c) {
+		return
+	}
 	for _, l := range _loggers {
 		l.Errorf(c, format, args...)
 	}
 }
 
 func Criticalf(c context.Context, format string, args ...interface{}) {
+	if isDisabled(c) {
+		return
+	}
 	for _, l := range _loggers {
 		l.Criticalf(c, format, args...)
 	}
