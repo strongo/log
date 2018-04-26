@@ -9,7 +9,7 @@ type TestingLogger struct {
 	t *testing.T
 }
 
-func (_ TestingLogger) Name() string {
+func (TestingLogger) Name() string {
 	return "TestingLogger"
 }
 
