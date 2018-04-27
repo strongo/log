@@ -1,10 +1,11 @@
 package log
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 )
 
+// Logger interface for log provider
 type Logger interface {
 	Name() string
 	Debugf(c context.Context, format string, args ...interface{})
@@ -16,10 +17,12 @@ type Logger interface {
 
 var _loggers []Logger
 
+// NumberOfLoggers returns number of registered loggers
 func NumberOfLoggers() int {
 	return len(_loggers)
 }
 
+// AddLogger registers logger
 func AddLogger(logger Logger) {
 	name := logger.Name()
 	for _, l := range _loggers {
@@ -32,10 +35,12 @@ func AddLogger(logger Logger) {
 
 var loggingDisabled = "loggingDisabled" // TODO: Check core libs on how to do it proepry
 
+// NewContextWithLoggingDisabled creates context with disabled logging
 func NewContextWithLoggingDisabled(c context.Context) context.Context {
 	return context.WithValue(c, &loggingDisabled, true)
 }
 
+// NewContextWithLoggingEnabled creates context with enabled logging
 func NewContextWithLoggingEnabled(c context.Context) context.Context {
 	return context.WithValue(c, &loggingDisabled, false)
 }
@@ -47,8 +52,10 @@ func isDisabled(c context.Context) bool {
 	return false
 }
 
-type LogFunc func(c context.Context, format string, args ...interface{})
+// Func function that do logging
+type Func func(c context.Context, format string, args ...interface{})
 
+// Debugf logs debug message
 func Debugf(c context.Context, format string, args ...interface{}) {
 	if isDisabled(c) {
 		return
@@ -58,6 +65,7 @@ func Debugf(c context.Context, format string, args ...interface{}) {
 	}
 }
 
+// Infof logs information message
 func Infof(c context.Context, format string, args ...interface{}) {
 	if isDisabled(c) {
 		return
@@ -67,6 +75,7 @@ func Infof(c context.Context, format string, args ...interface{}) {
 	}
 }
 
+// Warningf logs warning message
 func Warningf(c context.Context, format string, args ...interface{}) {
 	if isDisabled(c) {
 		return
@@ -76,6 +85,7 @@ func Warningf(c context.Context, format string, args ...interface{}) {
 	}
 }
 
+// Errorf logs error message
 func Errorf(c context.Context, format string, args ...interface{}) {
 	if isDisabled(c) {
 		return
@@ -85,6 +95,7 @@ func Errorf(c context.Context, format string, args ...interface{}) {
 	}
 }
 
+// Criticalf logs critical message
 func Criticalf(c context.Context, format string, args ...interface{}) {
 	if isDisabled(c) {
 		return

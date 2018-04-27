@@ -4,34 +4,44 @@ import (
 	"context"
 )
 
-type LogLevel int
+// Level specifies log record type
+type Level int
 
 const (
-	LevelDebug LogLevel = iota
+	// LevelDebug for debug records
+	LevelDebug Level = iota
+	// LevelInfo for info records
 	LevelInfo
+	// LevelWarning for warnings
 	LevelWarning
+	// LevelError for errors
 	LevelError
+	// LevelCritical for critical records
 	LevelCritical
 )
 
-type LogMessage struct {
-	Level  LogLevel
+// Message holds log record data
+type Message struct {
+	Level  Level
 	Format string
 	Args   []interface{}
 }
 
+// TestLogger is a test logger
 type TestLogger struct {
 	name     string
-	Messages []LogMessage
+	Messages []Message
 }
 
+// Name returns name of the logger
 func (logger *TestLogger) Name() string {
 	return logger.name
 }
-func (logger *TestLogger) add(level LogLevel, format string, args ...interface{}) {
-	logger.Messages = append(logger.Messages, LogMessage{Level: level, Format: format, Args: args})
+func (logger *TestLogger) add(level Level, format string, args ...interface{}) {
+	logger.Messages = append(logger.Messages, Message{Level: level, Format: format, Args: args})
 }
 
+// Debugf logs debug record
 func (logger *TestLogger) Debugf(ctx context.Context, format string, args ...interface{}) {
 	logger.add(LevelDebug, format, args...)
 }

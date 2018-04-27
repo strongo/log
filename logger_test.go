@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// TestingLogger is tests
 type TestingLogger struct {
 	t *testing.T
 }
