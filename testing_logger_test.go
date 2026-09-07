@@ -1,6 +1,7 @@
 package log
 
 import (
+	"context"
 	"testing"
 )
 
@@ -15,11 +16,11 @@ func TestNewTestingLogger(t *testing.T) {
 	if name := logger.Name(); name != loggerName {
 		t.Errorf("logger.Name() = %s, want %s", name, loggerName)
 	}
-	logger.Debugf(nil, "Hello, %s!", "World")
-	logger.Infof(nil, "Hello, %s!", "World")
-	logger.Warningf(nil, "Hello, %s!", "World")
-	logger.Errorf(nil, "Hello, %s!", "World")
-	logger.Criticalf(nil, "Hello, %s!", "World")
+	logger.Debugf(context.TODO(), "Hello, %s!", "World")
+	logger.Infof(context.TODO(), "Hello, %s!", "World")
+	logger.Warningf(context.TODO(), "Hello, %s!", "World")
+	logger.Errorf(context.TODO(), "Hello, %s!", "World")
+	logger.Criticalf(context.TODO(), "Hello, %s!", "World")
 
 	defer func() {
 		if r := recover(); r == nil {

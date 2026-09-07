@@ -1,12 +1,12 @@
 package log
 
 import (
+	"context"
 	"fmt"
 	"testing"
 )
 
 func TestNewPrinter(t *testing.T) {
-	var l Logger
-	l = NewPrinter("stdout", fmt.Printf)
-	l.Infof(nil, "Hello, %s!", "world")
+	l := NewPrinter("stdout", fmt.Printf)
+	l.Infof(context.TODO(), "Hello, %s!", "world")
 }
